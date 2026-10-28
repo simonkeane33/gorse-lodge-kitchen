@@ -62,7 +62,7 @@ h1,h2,h3{font-family:var(--f-display);font-weight:700;text-wrap:balance;margin:0
 .dot{width:12px;height:12px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.18)}
 .tag{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
 .tag.layout{border-color:var(--accent);background:var(--accent);color:var(--accent-ink)}
-.sec{display:grid;gap:14px}
+.sec{display:grid;gap:14px;scroll-margin-top:calc(var(--bar) + 16px + env(safe-area-inset-top,0px))}
 .sec-head{display:grid;gap:4px;border-top:1px solid var(--line);padding-top:18px}
 .sec-head h2{font-size:clamp(22px,2.6vw,28px);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 .sec-head p{margin:0;color:var(--muted);max-width:70ch}
@@ -71,6 +71,22 @@ h1,h2,h3{font-family:var(--f-display);font-weight:700;text-wrap:balance;margin:0
 .chip{font-size:14px;padding:5px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
 .chip.on{border-color:var(--accent);color:var(--accent);font-weight:600}
 .m-group{grid-column:1/-1;margin-top:8px}
+.picker{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.pick{position:relative;display:block;border-radius:10px;overflow:hidden;text-align:left;background:var(--line);box-shadow:0 0 0 1px var(--line)}
+.pick img{width:100%;aspect-ratio:16/8;object-fit:cover;display:block;transition:transform .5s ease}
+.pick:hover img{transform:scale(1.03)}
+.pick .ov{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;padding:20px 22px;color:#fff;background:linear-gradient(180deg,rgba(0,0,0,.05) 0%,rgba(0,0,0,.45) 35%,rgba(0,0,0,.82) 100%);text-shadow:0 1px 8px rgba(0,0,0,.35)}
+.pick .ov .mono{color:rgba(255,255,255,.85)}
+.pick .ov b{font:700 clamp(22px,2.6vw,30px)/1.1 var(--f-display)}
+.pick .ov span.d{font-size:15px;max-width:44ch;opacity:.95}
+.pick .go{display:inline-flex;align-self:flex-start;margin-top:6px;padding:7px 14px;border-radius:999px;background:#fff;color:#1c2220;font-weight:600;font-size:14px}
+.pick.on{box-shadow:0 0 0 3px var(--accent)}
+.pick.on .go{background:var(--accent);color:var(--accent-ink)}
+.filterbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.fbtn{padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-weight:600;font-size:15px}
+.fbtn[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.crumb{justify-self:start;font-size:15px;font-weight:600;color:var(--accent);padding:4px 0}
+@media (max-width:699px){.picker{grid-template-columns:minmax(0,1fr)}.pick img{aspect-ratio:16/9}.pick .ov{padding:16px}}
 
 main{min-width:0;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .wrap{max-width:1280px;margin:0 auto;display:grid;gap:28px}
@@ -308,16 +324,33 @@ const GROUPS=[["Current kitchen","The room as it is today.",["current"]],
 function buildNav(){
   const groups=[["Start",["overview"]],["Current",["current"]],["Colour studies · layout unchanged",GROUPS[1][2]],["Colour + layout studies",GROUPS[2][2]]];
   $("#railList").innerHTML=groups.map(([g,ids])=>`<li class="nav-group mono">${g}</li>`+ids.map(id=>{
-    if(id==="overview") return `<li><button class="nav-item" data-go="overview"><span class="letter">⌂</span><span><span class="nav-name">All concepts</span></span></button></li>`;
+    if(id==="overview") return `<li><button class="nav-item" data-go="overview"><span class="letter">⌂</span><span><span class="nav-name">All concepts</span></span></button></li>
+      <li><button class="nav-item" data-go="colour-studies"><span class="letter" style="font-size:11px">A–F</span><span><span class="nav-name">Colour studies</span></span></button></li>
+      <li><button class="nav-item" data-go="layout-studies"><span class="letter" style="font-size:11px">G–H</span><span><span class="nav-name">Colour + layout studies</span></span></button></li>`;
     const c=byId[id];return `<li><button class="nav-item" data-go="${c.id}"><span class="letter">${c.L}</span><span><span class="nav-name">${esc(c.name)}</span><span class="dots">${dots(c)}</span></span></button></li>`}).join("")).join("");
   const mc=c=>`<button class="m-card" data-go="${c.id}"><img src="${src(c,SHOTS[c.dir][0],true)}" alt=""><span><span class="mono">${c.L==="0"?"Baseline":"Concept "+c.L}</span><b>${esc(c.name)}</b><span class="dots">${dots(c)}</span></span></button>`;
-  $("#mGrid").innerHTML=`<button class="m-card" data-go="overview"><img src="${src(C[0],1,true)}" alt=""><span><span class="mono">Overview</span><b>All concepts</b></span></button>`+
+  $("#mGrid").innerHTML=`<span class="m-group mono">Browse</span><button class="m-card" data-go="colour-studies"><img src="${src(byId["concept-e"],1,true)}" alt=""><span><span class="mono">Concepts A–F</span><b>Colour studies</b></span></button>
+    <button class="m-card" data-go="layout-studies"><img src="${src(byId["concept-g"],1,true)}" alt=""><span><span class="mono">Concepts G–H</span><b>Colour + layout studies</b></span></button>
+    <button class="m-card" data-go="overview"><img src="${src(C[0],1,true)}" alt=""><span><span class="mono">Overview</span><b>All concepts</b></span></button>`+
     GROUPS.map(([g,,ids])=>`<span class="m-group mono">${g}</span>`+ids.map(id=>mc(byId[id])).join("")).join("");
 }
-function overview(){
-  return `<section class="intro"><span class="mono">Gorse Lodge · Kitchen renovation</span><h1>Choose a concept to explore</h1>
-  <p>Concepts A to F are colour studies: the layout stays exactly as it is today. G and H are colour + layout studies that also move things around. Open any concept for its renders, palette and finishes.</p></section>
-  ${GROUPS.map(([g,d,ids])=>`<section class="sec"><div class="sec-head"><h2>${g}${g.startsWith("Colour +")?' <span class="tag layout">Layout changes</span>':g==="Colour studies"?' <span class="tag">Layout unchanged</span>':""}</h2><p>${d}</p></div>
+const FILTERS={"colour-studies":1,"layout-studies":2};
+function overview(f){
+  const gi=FILTERS[f];
+  const pick=(key,img,kicker,title,desc,btn)=>`<button class="pick ${f===key?"on":""}" data-go="${key}"><img src="${img}" alt=""><span class="ov"><span class="mono">${kicker}</span><b>${title}</b><span class="d">${desc}</span><span class="go">${f===key?"Showing below":btn}</span></span></button>`;
+  const shown=gi?[GROUPS[gi]]:GROUPS;
+  return `<section class="intro"><span class="mono">Gorse Lodge · Kitchen renovation</span><h1>What would you like to see?</h1>
+  <p>Pick a type of study. Colour studies keep today's layout. Colour + layout studies also move the fridge and change the dresser.</p></section>
+  <section class="picker">
+   ${pick("colour-studies",src(byId["concept-e"],1,true),"Concepts A–F · 6 options","Colour studies","Same layout as today. New colours, worktops, tiles and handles only.","View colour studies")}
+   ${pick("layout-studies",src(byId["concept-g"],1,true),"Concepts G–H · 2 options","Colour + layout studies","Integrated fridge-freezer in place of the peninsula, plus new wall units over the dresser.","View layout studies")}
+  </section>
+  <div class="filterbar"><span class="mono">Show</span>
+   <button class="fbtn" data-go="overview" aria-pressed="${!gi}">Everything</button>
+   <button class="fbtn" data-go="colour-studies" aria-pressed="${gi===1}">Colour studies</button>
+   <button class="fbtn" data-go="layout-studies" aria-pressed="${gi===2}">Colour + layout</button>
+   <button class="fbtn" data-go="current" aria-pressed="false">Current kitchen</button></div>
+  ${shown.map(([g,d,ids])=>`<section class="sec"><div class="sec-head"><h2>${g}${g.startsWith("Colour +")?' <span class="tag layout">Layout changes</span>':g==="Colour studies"?' <span class="tag">Layout unchanged</span>':""}</h2><p>${d}</p></div>
   <div class="cards">${ids.map(id=>{const c=byId[id];return `<button class="card ${c.tag==="Layout"?"layout":""}" data-go="${c.id}"><img loading="lazy" src="${src(c,SHOTS[c.dir][0],true)}" alt="${esc(c.name)} render">
   <span class="body"><span class="row"><span class="mono">${c.L==="0"?"Baseline":"Concept "+c.L}</span>${tag(c)}</span>
   <h3>${esc(c.name)}</h3><p>${esc(c.short)}</p><span class="dots">${dots(c)}</span></span></button>`}).join("")}</div></section>`).join("")}`;
@@ -326,7 +359,8 @@ function concept(c){
   const i=C.indexOf(c),prev=C[i-1],next=C[i+1];
   const shots=SHOTS[c.dir];
   const chips=c.tag==="Layout"?LAYOUT_CHIPS.map(t=>`<span class="chip on">${t}</span>`).join(""):c.tag==="Colour"?`<span class="chip">Layout unchanged</span>`:"";
-  return `<section class="head"><div class="kicker"><span class="mono">${c.L==="0"?"Baseline":"Concept "+c.L}</span>${tag(c)}</div>
+  const back=c.tag==="Layout"?["layout-studies","← All colour + layout studies"]:c.tag==="Colour"?["colour-studies","← All colour studies"]:["overview","← All concepts"];
+  return `<button class="crumb" data-go="${back[0]}">${back[1]}</button><section class="head"><div class="kicker"><span class="mono">${c.L==="0"?"Baseline":"Concept "+c.L}</span>${tag(c)}</div>
    <h1>${esc(c.name)}</h1><p class="lede">${esc(c.lede)}</p>${chips?`<div class="chips">${chips}</div>`:""}
    <div class="swatches">${c.sw.map(s=>`<span class="sw"><i style="background:${s[1]}"></i><b>${esc(s[0])}</b><span>${s[1]}</span></span>`).join("")}</div></section>
   <section class="gallery">${shots.map((v,k)=>`<figure style="margin:0"><button class="shot" data-open="${k}"><img loading="lazy" src="${src(c,v,true)}" alt="${esc(c.name)}, ${VIEWS[v]}">
@@ -338,19 +372,21 @@ function concept(c){
   <nav class="pager">${prev?`<button data-go="${prev.id}"><span class="mono">Previous</span><b>${prev.L==="0"?"":prev.L+" · "}${esc(prev.name)}</b></button>`:`<button data-go="overview"><span class="mono">Back to</span><b>All concepts</b></button>`}
    ${next?`<button data-go="${next.id}"><span class="mono">Next</span><b>${next.L} · ${esc(next.name)}</b></button>`:`<button data-go="overview"><span class="mono">Back to</span><b>All concepts</b></button>`}</nav>`;
 }
-let current=null;
+let current=null,jump=false;
 function route(){
   const id=(location.hash||"").slice(1);
   current=byId[id]||null;
-  $("#view").innerHTML=current?concept(current):overview();
-  document.querySelectorAll("[data-go]").forEach(b=>{const on=(b.dataset.go===(current?current.id:"overview"));if(b.closest(".rail,.menu"))b.setAttribute("aria-current",on?"page":"false")});
-  $("#menuBtnCur").textContent=current?(current.L==="0"?"Today":current.L):"All";
+  const f=FILTERS[id]?id:null;
+  $("#view").innerHTML=current?concept(current):overview(f);
+  document.querySelectorAll("[data-go]").forEach(b=>{const on=(b.dataset.go===(current?current.id:(f||"overview")));if(b.closest(".rail,.menu"))b.setAttribute("aria-current",on?"page":"false")});
+  $("#menuBtnCur").textContent=current?(current.L==="0"?"Today":current.L):(f==="colour-studies"?"A–F":f==="layout-studies"?"G–H":"All");
   document.title=current?`${current.name} · Gorse Lodge Kitchen`:"Gorse Lodge Kitchen";
-  window.scrollTo({top:0});
+  const sec=f&&jump&&document.querySelector(".sec");jump=false;
+  if(sec)sec.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});else window.scrollTo({top:0});
 }
 document.addEventListener("click",e=>{
   const g=e.target.closest("[data-go]");
-  if(g){const id=g.dataset.go;closeMenu();if(id==="overview"){if(location.hash){location.hash="";}route();}else if(location.hash!=="#"+id){location.hash=id;}else route();return}
+  if(g){const id=g.dataset.go;closeMenu();jump=!!FILTERS[id]&&!!g.closest(".pick,.filterbar");if(id==="overview"){if(location.hash){location.hash="";}route();}else if(location.hash!=="#"+id){location.hash=id;}else route();return}
   const o=e.target.closest("[data-open]");if(o&&current)openLb(+o.dataset.open);
 });
 window.addEventListener("hashchange",route);
