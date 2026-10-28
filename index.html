@@ -260,6 +260,7 @@ const FRIDGE_LAYOUT=[
  "Freestanding fridge in the dining corner removed, which opens up the space around the table.",
  "Dresser top replaced: the glazed hutch goes, the lower dresser and its worktop stay. Above it, three wall units match the west wall: cupboard, open shelves, cupboard. They start 420 mm above the worktop and are 845 mm tall including trims.",
  "Tide clock moves to the north wall beside the dining window, and the double socket behind the new fridge housing is removed."];
+const FRIDGE_LAYOUT_I=FRIDGE_LAYOUT.map(t=>t.startsWith("Dresser top replaced")?"Dresser top replaced: the glazed hutch goes, the lower dresser and its worktop stay. Above it, four cupboards of equal width (about 380 mm each), with the two centre doors' handles meeting in the middle. They start 420 mm above the worktop and are 845 mm tall including trims.":t);
 const C=[
  {id:"current",L:"0",name:"Current kitchen",short:"As it is today",dir:"concept-0-current-state",tag:"Baseline",
   lede:"The existing room, modelled from measurements and photos. Every concept is rendered from the same six fixed camera positions so you can compare like with like.",
@@ -305,10 +306,15 @@ const C=[
   lede:"Concept D's chalk white and pale oak, with the same layout changes as G: integrated fridge-freezer in place of the peninsula and new wall units over the dresser.",
   sw:[["Chalk white","#F2F0EA"],["Pale oak","#D9C4A6"],["Handmade tile","#F0ECE3"],["Tile grout","#D8D5CE"],["Grey linen","#C9C6BF"]],
   spec:[["Finishes","As Concept D"],["Cabinets","Chalky warm-white paint, including the new fridge housing and dresser wall units"],["Worktops","Pale oak"],["Floor","Pale oak planks"],["Fridge","Integrated fridge-freezer, 650 wide × 600 deep"]],
-  layout:FRIDGE_LAYOUT,layoutNone:false}
+  layout:FRIDGE_LAYOUT,layoutNone:false},
+ {id:"concept-i",L:"I",name:"Sage, new layout",short:"All-sage units with integrated fridge",dir:"concept-I",tag:"Layout",
+  lede:"Concept A's soft palette taken all the way: every unit in pale sage, with the new layout. The peninsula becomes an integrated fridge-freezer and the dresser gets four matching cupboards above.",
+  sw:[["Pale sage","#D5D9CD"],["White quartz","#F2F1EE"],["Warm white walls","#EFECE6"],["Brushed brass","#C9A86A"],["Light oak","#D4B48C"]],
+  spec:[["Finishes","Based on Concept A"],["Cabinets","Pale sage paint on every unit: base, wall, tall, hot press, dresser and fridge housing"],["Worktops","White quartz, fine grey veining"],["Splashback","White glazed mosaic, soft grey grout"],["Walls","Warm white"],["Handles","Brushed brass"],["Dining","Light oak table and chairs, oatmeal bouclé pads"],["Fridge","Integrated fridge-freezer, 650 wide × 600 deep"]],
+  layout:FRIDGE_LAYOUT_I,layoutNone:false}
 ];
 /* Renders available now. Add a view number here when it finishes rendering. */
-const SHOTS={"concept-0-current-state":[1,2],"concept-A":[1,2],"concept-B":[1,2],"concept-C":[1,2],"concept-D":[1,2],"concept-E":[1,2],"concept-F":[1,2],"concept-G":[1,2,3,4,5,6],"concept-H":[1,2,3,4,5,6]};
+const SHOTS={"concept-0-current-state":[1,2],"concept-A":[1,2],"concept-B":[1,2],"concept-C":[1,2],"concept-D":[1,2],"concept-E":[1,2],"concept-F":[1,2],"concept-G":[1,2,3,4,5,6],"concept-H":[1,2,3,4,5,6],"concept-I":[1,2,3,4,5,6]};
 const PENDING={};
 const letterOf=d=>d==="concept-0-current-state"?"0":d.slice(-1);
 const src=(c,v,t)=>`img/${c.dir}/kitchen-00${v}-concept-${letterOf(c.dir)}${t?"_t":""}.jpg`;
@@ -321,18 +327,18 @@ const tag=c=>`<span class="tag ${c.tag==="Layout"?"layout":""}">${TAGTXT[c.tag]}
 const LAYOUT_CHIPS=["Peninsula removed","Integrated fridge-freezer","New dresser wall units","Freestanding fridge removed"];
 const GROUPS=[["Current kitchen","The room as it is today.",["current"]],
  ["Colour studies","Same layout as today. Only colours, finishes and fittings change.",["concept-a","concept-b","concept-c","concept-d","concept-e","concept-f"]],
- ["Colour + layout studies","New finishes plus layout changes: integrated fridge-freezer in place of the peninsula and new wall units over the dresser.",["concept-g","concept-h"]]];
+ ["Colour + layout studies","New finishes plus layout changes: integrated fridge-freezer in place of the peninsula and new wall units over the dresser.",["concept-g","concept-h","concept-i"]]];
 
 function buildNav(){
   const groups=[["Start",["overview"]],["Current",["current"]],["Colour studies · layout unchanged",GROUPS[1][2]],["Colour + layout studies",GROUPS[2][2]]];
   $("#railList").innerHTML=groups.map(([g,ids])=>`<li class="nav-group mono">${g}</li>`+ids.map(id=>{
     if(id==="overview") return `<li><button class="nav-item" data-go="overview"><span class="letter">⌂</span><span><span class="nav-name">All concepts</span></span></button></li>
       <li><button class="nav-item" data-go="colour-studies"><span class="letter" style="font-size:11px">A–F</span><span><span class="nav-name">Colour studies</span></span></button></li>
-      <li><button class="nav-item" data-go="layout-studies"><span class="letter" style="font-size:11px">G–H</span><span><span class="nav-name">Colour + layout studies</span></span></button></li>`;
+      <li><button class="nav-item" data-go="layout-studies"><span class="letter" style="font-size:11px">G–I</span><span><span class="nav-name">Colour + layout studies</span></span></button></li>`;
     const c=byId[id];return `<li><button class="nav-item" data-go="${c.id}"><span class="letter">${c.L}</span><span><span class="nav-name">${esc(c.name)}</span><span class="dots">${dots(c)}</span></span></button></li>`}).join("")).join("");
   const mc=c=>`<button class="m-card" data-go="${c.id}"><img src="${src(c,SHOTS[c.dir][0],true)}" alt=""><span><span class="mono">${c.L==="0"?"Baseline":"Concept "+c.L}</span><b>${esc(c.name)}</b><span class="dots">${dots(c)}</span></span></button>`;
   $("#mGrid").innerHTML=`<span class="m-group mono">Browse</span><button class="m-card" data-go="colour-studies"><img src="${src(byId["concept-e"],1,true)}" alt=""><span><span class="mono">Concepts A–F</span><b>Colour studies</b></span></button>
-    <button class="m-card" data-go="layout-studies"><img src="${src(byId["concept-g"],1,true)}" alt=""><span><span class="mono">Concepts G–H</span><b>Colour + layout studies</b></span></button>
+    <button class="m-card" data-go="layout-studies"><img src="${src(byId["concept-g"],1,true)}" alt=""><span><span class="mono">Concepts G–I</span><b>Colour + layout studies</b></span></button>
     <button class="m-card" data-go="overview"><img src="${src(C[0],1,true)}" alt=""><span><span class="mono">Overview</span><b>All concepts</b></span></button>`+
     GROUPS.map(([g,,ids])=>`<span class="m-group mono">${g}</span>`+ids.map(id=>mc(byId[id])).join("")).join("");
 }
@@ -345,7 +351,7 @@ function overview(f){
   <p>Pick a type of study. Colour studies keep today's layout. Colour + layout studies also move the fridge and change the dresser.</p></section>
   <section class="picker">
    ${pick("colour-studies",src(byId["concept-e"],1,true),"Concepts A–F · 6 options","Colour studies","Same layout as today. New colours, worktops, tiles and handles only.","View colour studies")}
-   ${pick("layout-studies",src(byId["concept-g"],1,true),"Concepts G–H · 2 options","Colour + layout studies","Integrated fridge-freezer in place of the peninsula, plus new wall units over the dresser.","View layout studies")}
+   ${pick("layout-studies",src(byId["concept-g"],1,true),"Concepts G–I · 3 options","Colour + layout studies","Integrated fridge-freezer in place of the peninsula, plus new wall units over the dresser.","View layout studies")}
   </section>
   <div class="filterbar"><span class="mono">Show</span>
    <button class="fbtn" data-go="overview" aria-pressed="${!gi}">Everything</button>
@@ -381,7 +387,7 @@ function route(){
   const f=FILTERS[id]?id:null;
   $("#view").innerHTML=current?concept(current):overview(f);
   document.querySelectorAll("[data-go]").forEach(b=>{const on=(b.dataset.go===(current?current.id:(f||"overview")));if(b.closest(".rail,.menu"))b.setAttribute("aria-current",on?"page":"false")});
-  $("#menuBtnCur").textContent=current?(current.L==="0"?"Today":current.L):(f==="colour-studies"?"A–F":f==="layout-studies"?"G–H":"All");
+  $("#menuBtnCur").textContent=current?(current.L==="0"?"Today":current.L):(f==="colour-studies"?"A–F":f==="layout-studies"?"G–I":"All");
   document.title=current?`${current.name} · Gorse Lodge Kitchen`:"Gorse Lodge Kitchen";
   const sec=f&&jump&&document.querySelector(".sec");jump=false;
   if(sec)sec.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});else window.scrollTo({top:0});
