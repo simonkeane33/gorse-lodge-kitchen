@@ -85,7 +85,9 @@ h1,h2,h3{font-family:var(--f-display);font-weight:700;text-wrap:balance;margin:0
 .filterbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .fbtn{padding:8px 16px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-weight:600;font-size:15px}
 .fbtn[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.crumb{justify-self:start;font-size:15px;font-weight:600;color:var(--accent);padding:4px 0}
+.crumb{justify-self:start;display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:10px 22px 10px 16px;border-radius:999px;background:var(--accent);color:var(--accent-ink);font-size:17px;font-weight:700;box-shadow:0 6px 18px -8px rgba(0,0,0,.45);transition:transform .15s ease,box-shadow .15s ease}
+.crumb:hover{transform:translateX(-2px);box-shadow:0 8px 22px -8px rgba(0,0,0,.55)}
+.crumb .arr{font-size:22px;line-height:1}
 @media (max-width:699px){.picker{grid-template-columns:minmax(0,1fr)}.pick img{aspect-ratio:16/9}.pick .ov{padding:16px}}
 
 main{min-width:0;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
@@ -359,8 +361,8 @@ function concept(c){
   const i=C.indexOf(c),prev=C[i-1],next=C[i+1];
   const shots=SHOTS[c.dir];
   const chips=c.tag==="Layout"?LAYOUT_CHIPS.map(t=>`<span class="chip on">${t}</span>`).join(""):c.tag==="Colour"?`<span class="chip">Layout unchanged</span>`:"";
-  const back=c.tag==="Layout"?["layout-studies","← All colour + layout studies"]:c.tag==="Colour"?["colour-studies","← All colour studies"]:["overview","← All concepts"];
-  return `<button class="crumb" data-go="${back[0]}">${back[1]}</button><section class="head"><div class="kicker"><span class="mono">${c.L==="0"?"Baseline":"Concept "+c.L}</span>${tag(c)}</div>
+  const back=c.tag==="Layout"?["layout-studies","Back to colour + layout studies"]:c.tag==="Colour"?["colour-studies","Back to colour studies"]:["overview","Back to all concepts"];
+  return `<button class="crumb" data-go="${back[0]}"><span class="arr" aria-hidden="true">←</span>${back[1]}</button><section class="head"><div class="kicker"><span class="mono">${c.L==="0"?"Baseline":"Concept "+c.L}</span>${tag(c)}</div>
    <h1>${esc(c.name)}</h1><p class="lede">${esc(c.lede)}</p>${chips?`<div class="chips">${chips}</div>`:""}
    <div class="swatches">${c.sw.map(s=>`<span class="sw"><i style="background:${s[1]}"></i><b>${esc(s[0])}</b><span>${s[1]}</span></span>`).join("")}</div></section>
   <section class="gallery">${shots.map((v,k)=>`<figure style="margin:0"><button class="shot" data-open="${k}"><img loading="lazy" src="${src(c,v,true)}" alt="${esc(c.name)}, ${VIEWS[v]}">
