@@ -290,8 +290,8 @@ const C=[
   layout:FRIDGE_LAYOUT,layoutNone:false}
 ];
 /* Renders available now. Add a view number here when it finishes rendering. */
-const SHOTS={"concept-0-current-state":[1,2],"concept-A":[1,2],"concept-B":[1,2],"concept-C":[1,2],"concept-D":[1,2],"concept-E":[1,2],"concept-F":[1,2],"concept-G":[1,2,3,4,5,6],"concept-H":[1,5]};
-const PENDING={"concept-H":"Views 2, 3, 4 and 6 are still rendering."};
+const SHOTS={"concept-0-current-state":[1,2],"concept-A":[1,2],"concept-B":[1,2],"concept-C":[1,2],"concept-D":[1,2],"concept-E":[1,2],"concept-F":[1,2],"concept-G":[1,2,3,4,5,6],"concept-H":[1,2,3,4,5,6]};
+const PENDING={};
 const letterOf=d=>d==="concept-0-current-state"?"0":d.slice(-1);
 const src=(c,v,t)=>`img/${c.dir}/kitchen-00${v}-concept-${letterOf(c.dir)}${t?"_t":""}.jpg`;
 const byId=Object.fromEntries(C.map(c=>[c.id,c]));
