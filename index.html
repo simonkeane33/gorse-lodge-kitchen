@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en-IE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Gorse Lodge Kitchen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: sticky top bar; desktop = concept rail + content, tablet = drop-down concept sheet, phone = slide-in drawer. Renders lead every view. */
+:root{
+  --bg:#f4f5f2; --surface:#ffffff; --ink:#1c2220; --muted:#5d6762; --line:#d9ddd7;
+  --accent:#2f5a4c; --accent-ink:#ffffff; --scrim:rgba(14,18,16,.94);
+  --f-display:"Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --f-body:"Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --rail:288px; --bar:60px; --r:6px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141816; --surface:#1c211f; --ink:#e8ece9; --muted:#9ba6a0; --line:#2e3532;
+  --accent:#8cc2ad; --accent-ink:#10201a; --scrim:rgba(6,8,7,.96); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141816; --surface:#1c211f; --ink:#e8ece9; --muted:#9ba6a0; --line:#2e3532;
+  --accent:#8cc2ad; --accent-ink:#10201a; --scrim:rgba(6,8,7,.96); color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.55 var(--f-body);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--surface)}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+h1,h2,h3{font-family:var(--f-display);font-weight:700;text-wrap:balance;margin:0;line-height:1.1}
+.mono{font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+
+/* ---------- top bar ---------- */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;height:var(--bar);background:var(--surface);border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.brand{display:flex;flex-direction:column;line-height:1.15;min-width:0}
+.brand b{font-family:var(--f-display);font-size:19px;font-weight:700}
+.brand span{font-size:13px;color:var(--muted)}
+.bar .spacer{flex:1}
+.menu-btn{display:none;align-items:center;gap:10px;height:40px;padding:0 14px;border:1px solid var(--line);border-radius:999px;font-weight:600;font-size:15px;white-space:nowrap}
+.menu-btn .cur{font-family:var(--f-mono);font-size:12px;background:var(--accent);color:var(--accent-ink);border-radius:999px;padding:2px 8px}
+.burger{display:none;width:44px;height:44px;border-radius:999px;align-items:center;justify-content:center;border:1px solid var(--line)}
+.burger i,.burger i::before,.burger i::after{display:block;width:18px;height:2px;background:var(--ink);border-radius:2px;position:relative;content:""}
+.burger i::before{position:absolute;top:-6px}.burger i::after{position:absolute;top:6px}
+
+/* ---------- shell ---------- */
+.shell{display:grid;grid-template-columns:var(--rail) minmax(0,1fr);min-height:calc(100vh - var(--bar))}
+.rail{position:sticky;top:calc(var(--bar) + env(safe-area-inset-top,0px));align-self:start;height:calc(100vh - var(--bar) - env(safe-area-inset-top,0px));overflow:auto;border-right:1px solid var(--line);
+  padding-block:20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:16px;background:var(--bg)}
+.nav-list{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.nav-group{margin:18px 0 6px 10px}
+.nav-item{width:100%;display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;align-items:center;text-align:left;padding:9px 10px;border-radius:var(--r)}
+.nav-item:hover{background:var(--surface)}
+.nav-item[aria-current="page"]{background:var(--surface);box-shadow:inset 0 0 0 1px var(--line)}
+.letter{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font:700 16px var(--f-display);background:var(--line);color:var(--ink)}
+.nav-item[aria-current="page"] .letter{background:var(--accent);color:var(--accent-ink)}
+.nav-name{font-weight:600;font-size:15px;line-height:1.25;display:block}
+.dots{display:flex;gap:4px;margin-top:5px;align-items:center}
+.dot{width:12px;height:12px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.18)}
+.tag{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.tag.layout{border-color:var(--accent);background:var(--accent);color:var(--accent-ink)}
+.sec{display:grid;gap:14px}
+.sec-head{display:grid;gap:4px;border-top:1px solid var(--line);padding-top:18px}
+.sec-head h2{font-size:clamp(22px,2.6vw,28px);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.sec-head p{margin:0;color:var(--muted);max-width:70ch}
+.card.layout{border-color:var(--accent);box-shadow:inset 0 3px 0 var(--accent)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:14px;padding:5px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.chip.on{border-color:var(--accent);color:var(--accent);font-weight:600}
+.m-group{grid-column:1/-1;margin-top:8px}
+
+main{min-width:0;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1280px;margin:0 auto;display:grid;gap:28px}
+@media (min-width:1100px){main{padding-left:40px;padding-right:max(40px,env(safe-area-inset-right,0px))}}
+
+/* ---------- overview ---------- */
+.intro{display:grid;gap:10px;max-width:68ch}
+.intro h1{font-size:clamp(30px,4.2vw,48px)}
+.intro p{margin:0;color:var(--muted);font-size:17px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:20px}
+.card{display:grid;grid-template-rows:auto 1fr;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;transition:transform .2s ease,box-shadow .2s ease}
+.card:hover{transform:translateY(-2px);box-shadow:0 10px 30px -18px rgba(0,0,0,.45)}
+.card img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:var(--line)}
+.card .body{padding:14px 16px 16px;display:grid;gap:6px;align-content:start}
+.card .row{display:flex;align-items:center;gap:10px;justify-content:space-between}
+.card h3{font-size:20px}
+.card p{margin:0;color:var(--muted);font-size:15px}
+
+/* ---------- concept view ---------- */
+.head{display:grid;gap:12px}
+.head .kicker{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.head h1{font-size:clamp(30px,4.4vw,52px)}
+.head .lede{margin:0;font-size:18px;color:var(--muted);max-width:66ch}
+.swatches{display:flex;flex-wrap:wrap;gap:10px}
+.sw{display:grid;grid-template-columns:28px auto;gap:2px 10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:8px 12px 8px 8px}
+.sw i{grid-row:span 2;width:28px;height:28px;border-radius:4px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)}
+.sw b{font-size:14px;font-weight:600;line-height:1.1}
+.sw span{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.shot{position:relative;display:block;width:100%;border-radius:var(--r);overflow:hidden;background:var(--line);text-align:left}
+.shot img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;transition:transform .5s ease}
+.shot:hover img{transform:scale(1.025)}
+.shot figcaption{position:absolute;left:0;right:0;bottom:0;padding:28px 14px 10px;background:linear-gradient(transparent,rgba(0,0,0,.62));color:#fff;display:flex;gap:10px;align-items:baseline;font-size:14px}
+.shot figcaption em{font:500 11px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;opacity:.85;font-style:normal}
+.pending{border:1px dashed var(--line);border-radius:var(--r);display:grid;place-items:center;aspect-ratio:16/9;color:var(--muted);text-align:center;padding:16px;font-size:14px}
+.details{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:28px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;display:grid;gap:14px;align-content:start;min-width:0}
+.panel h2{font-size:22px}
+dl.spec{margin:0;display:grid;grid-template-columns:minmax(110px,34%) minmax(0,1fr);border-top:1px solid var(--line)}
+dl.spec dt,dl.spec dd{margin:0;padding:10px 0;border-bottom:1px solid var(--line)}
+dl.spec dt{color:var(--muted);font-size:14px;padding-right:14px}
+dl.spec dd{font-size:15px}
+.changes{margin:0;padding:0;list-style:none;display:grid;gap:12px}
+.changes li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;font-size:15px}
+.changes li::before{content:"";width:10px;height:10px;margin-top:7px;border-radius:2px;background:var(--accent)}
+.changes.none li::before{background:var(--line)}
+.pager{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:20px}
+.pager button{display:grid;gap:2px;text-align:left;padding:10px 14px;border:1px solid var(--line);border-radius:var(--r);min-width:0}
+.pager button:last-child{text-align:right;margin-left:auto}
+.pager b{font-family:var(--f-display);font-size:17px}
+
+/* ---------- menus (tablet sheet / phone drawer) ---------- */
+.menu{position:fixed;z-index:70;background:var(--surface);visibility:hidden}
+.menu.open{visibility:visible}
+.menu-scrim{position:fixed;inset:0;z-index:65;background:rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:opacity .2s}
+.menu-scrim.open{opacity:1;pointer-events:auto}
+.menu .m-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.close-x{width:44px;height:44px;border-radius:999px;border:1px solid var(--line);font-size:22px;line-height:1}
+.m-grid{display:grid;gap:12px}
+.m-card{display:grid;grid-template-columns:96px minmax(0,1fr);gap:12px;align-items:center;text-align:left;padding:8px;border:1px solid var(--line);border-radius:var(--r)}
+.m-card img{width:96px;aspect-ratio:16/10;object-fit:cover;border-radius:4px;display:block}
+.m-card[aria-current="page"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.m-card b{display:block;font-size:15px;line-height:1.25}
+.m-card .mono{font-size:11px}
+
+@media (max-width:1099px){
+  :root{--rail:0px}
+  .shell{grid-template-columns:minmax(0,1fr)}
+  .rail{display:none}
+  .details{grid-template-columns:minmax(0,1fr)}
+}
+/* tablet: drop-down sheet under the bar, cards in a grid */
+@media (min-width:700px) and (max-width:1099px){
+  .menu-btn{display:inline-flex}
+  .menu{top:calc(var(--bar) + env(safe-area-inset-top,0px));left:0;right:0;max-height:calc(100vh - var(--bar) - env(safe-area-inset-top,0px) - 40px);overflow:auto;border-bottom:1px solid var(--line);
+    box-shadow:0 24px 40px -24px rgba(0,0,0,.35);padding-block:18px 22px;padding-left:max(24px,env(safe-area-inset-left,0px));padding-right:max(24px,env(safe-area-inset-right,0px));
+    transform:translateY(-12px);opacity:0;transition:transform .2s ease,opacity .2s ease,visibility 0s .2s}
+  .menu.open{transform:none;opacity:1;transition:transform .2s ease,opacity .2s ease}
+  .m-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .m-card{grid-template-columns:minmax(0,1fr)}
+  .m-card img{width:100%}
+  .menu .m-head{margin-bottom:14px}
+  .close-x{display:none}
+}
+/* phone: full-height drawer from the left */
+@media (max-width:699px){
+  .burger{display:inline-flex}
+  .brand span{display:none}
+  .menu{top:0;bottom:0;left:0;width:min(88vw,380px);overflow:auto;border-right:1px solid var(--line);
+    padding-top:calc(14px + env(safe-area-inset-top,0px));padding-bottom:calc(20px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:16px;
+    transform:translateX(-100%);transition:transform .25s ease,visibility 0s .25s}
+  .menu.open{transform:none;transition:transform .25s ease}
+  .menu .m-head{margin-bottom:14px}
+  .gallery{grid-template-columns:minmax(0,1fr)}
+  .head .lede{font-size:16px}
+  .panel{padding:16px}
+  dl.spec{grid-template-columns:minmax(0,1fr)}
+  dl.spec dt{border-bottom:0;padding-bottom:0}
+  dl.spec dd{padding-top:2px}
+  .pager button{flex:1 1 100%}
+}
+
+/* ---------- lightbox ---------- */
+.lb{position:fixed;inset:0;z-index:90;background:var(--scrim);display:grid;grid-template-rows:auto minmax(0,1fr) auto;color:#f1f4f2}
+.lb[hidden]{display:none!important}
+.lb-top,.lb-bottom{display:flex;align-items:center;gap:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.lb-top{padding-top:calc(10px + env(safe-area-inset-top,0px));padding-bottom:10px}
+.lb-bottom{padding-top:10px;padding-bottom:calc(14px + env(safe-area-inset-bottom,0px));justify-content:center;flex-wrap:wrap}
+.lb-title{flex:1;min-width:0}
+.lb-title b{display:block;font-family:var(--f-display);font-size:17px}
+.lb-title span{font:500 11px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;opacity:.75}
+.lb-btn{height:42px;min-width:42px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.28);color:#f1f4f2;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:14px}
+.lb-btn[aria-pressed="true"]{background:#f1f4f2;color:#141816}
+.lb-btn:disabled{opacity:.35;cursor:default}
+.lb-stage{position:relative;display:grid;place-items:center;min-height:0;padding-left:max(8px,env(safe-area-inset-left,0px));padding-right:max(8px,env(safe-area-inset-right,0px))}
+.lb-stage{overflow:hidden}
+.lb-stage img{position:absolute;inset:0;margin:auto;max-width:calc(100% - 16px);max-height:100%;object-fit:contain;border-radius:3px;user-select:none}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:22px}
+.lb-nav.prev{left:max(12px,env(safe-area-inset-left,0px))}.lb-nav.next{right:max(12px,env(safe-area-inset-right,0px))}
+.lb-count{font:500 12px var(--f-mono);opacity:.75}
+@media (max-width:699px){.lb-nav{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+</head>
+<body>
+<header class="bar">
+  <button class="burger" id="burger" aria-label="Open concept menu" aria-controls="menu" aria-expanded="false"><i></i></button>
+  <div class="brand"><b>Gorse Lodge Kitchen</b><span>Renovation concepts</span></div>
+  <div class="spacer"></div>
+  <button class="menu-btn" id="menuBtn" aria-controls="menu" aria-expanded="false"><span id="menuBtnLabel">Concepts</span><span class="cur" id="menuBtnCur">All</span></button>
+</header>
+
+<div class="menu-scrim" id="scrim"></div>
+<nav class="menu" id="menu" aria-label="Concepts">
+  <div class="m-head"><span class="mono">Choose a concept</span><button class="close-x" id="menuClose" aria-label="Close menu">×</button></div>
+  <div class="m-grid" id="mGrid"></div>
+</nav>
+
+<div class="shell">
+  <aside class="rail"><nav aria-label="Concepts"><ul class="nav-list" id="railList"></ul></nav></aside>
+  <main id="main"><div class="wrap" id="view"></div></main>
+</div>
+
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Render viewer">
+  <div class="lb-top">
+    <div class="lb-title"><b id="lbTitle"></b><span id="lbSub"></span></div>
+    <button class="lb-btn" id="lbClose" aria-label="Close viewer">✕</button>
+  </div>
+  <div class="lb-stage" id="lbStage">
+    <button class="lb-nav prev" id="lbPrev" aria-label="Previous view">‹</button>
+    <img id="lbImg" alt="">
+    <button class="lb-nav next" id="lbNext" aria-label="Next view">›</button>
+  </div>
+  <div class="lb-bottom">
+    <button class="lb-btn" id="lbPrev2" aria-label="Previous view">‹ Prev</button>
+    <span class="lb-count" id="lbCount"></span>
+    <button class="lb-btn" id="lbNext2" aria-label="Next view">Next ›</button>
+    <button class="lb-btn" id="lbCompare" aria-pressed="false">Compare with current kitchen</button>
+  </div>
+</div>
+
+<script>
+const VIEWS={1:"South looking north",2:"East looking west",3:"North-west corner",4:"North-east corner",5:"South-east corner",6:"South-west corner"};
+const SAME_LAYOUT=["Same layout as the current kitchen. Only colours, finishes and fittings change.","Every unit, worktop and appliance stays where it is today, so this is the lower-cost route: paint or re-door the cabinets, new worktops and a new splashback."];
+const FRIDGE_LAYOUT=[
+ "Peninsula removed. Its 650 mm width now holds a tall integrated fridge-freezer against the north wall, between the two windows: freezer drawer-height door below, one full-height fridge door above.",
+ "The housing is 600 deep, 2,148 mm tall and finished with a flush top trim and painted end panels. The worktop and splashback stop neatly at its side.",
+ "Freestanding fridge in the dining corner removed, which opens up the space around the table.",
+ "Dresser top replaced: the glazed hutch goes, the lower dresser and its worktop stay. Above it, three wall units match the west wall: cupboard, open shelves, cupboard. They start 420 mm above the worktop and are 845 mm tall including trims.",
+ "Tide clock moves to the north wall beside the dining window, and the double socket behind the new fridge housing is removed."];
+const C=[
+ {id:"current",L:"0",name:"Current kitchen",short:"As it is today",dir:"concept-0-current-state",tag:"Baseline",
+  lede:"The existing room, modelled from measurements and photos. Every concept is rendered from the same six fixed camera positions so you can compare like with like.",
+  sw:[["Honey oak","#B9814A"],["Black granite","#1E1F21"],["Burgundy mosaic","#6E1F2B"],["Sandstone floor","#D8C3A1"],["Grey-blue walls","#A9B2B8"]],
+  spec:[["Cabinets","Honey oak shaker doors throughout"],["Worktops","Speckled black granite"],["Splashback","Burgundy glass mosaic"],["Walls","Grey-blue paint"],["Floor","Sandstone tiles, 450 mm"],["Handles","Brushed steel bars"],["Dining","Oak table with black glass top, oak chairs with leather pads"],["Blinds","Cream scalloped roller blinds"]],
+  layout:["Peninsula with three doors on the table side, freestanding fridge in the dining corner, oak dresser with a glazed hutch."],layoutNone:true},
+ {id:"concept-a",L:"A",name:"Cool white & sage",short:"Fresh, airy, two-tone",dir:"concept-A",tag:"Colour",
+  lede:"The brightest, most spacious-feeling option: warm white uppers and tall units over a very pale sage base run, white quartz and a white mosaic.",
+  sw:[["Warm white","#F1EEE7"],["Pale sage","#D5D9CD"],["White quartz","#F2F1EE"],["Brushed brass","#C9A86A"],["Light oak","#D4B48C"]],
+  spec:[["Upper & tall units","Warm white satin paint (hot press and dresser too)"],["Base units","Very pale sage paint"],["Worktops","White quartz, fine grey veining"],["Splashback","White glazed mosaic, soft grey grout"],["Walls","Warm white"],["Floor","Paler, cooler limestone tone"],["Handles","Brushed brass"],["Dining","Light oak table and chairs, oatmeal bouclé pads"],["Blinds","Crisp white"]],
+  layout:SAME_LAYOUT,layoutNone:true},
+ {id:"concept-b",L:"B",name:"Warm cream",short:"Soft, warm, one colour",dir:"concept-B",tag:"Colour",
+  lede:"Every cabinet in one soft cream, with warm-veined quartz and a cream mosaic. Bright, but with more warmth than A.",
+  sw:[["Soft cream","#EEE4D1"],["Warm quartz","#F0E8DA"],["Lime white walls","#F0E9DC"],["Aged brass","#B8925A"],["Terracotta linen","#B5704F"]],
+  spec:[["Cabinets","Soft cream paint throughout"],["Worktops","Warm white quartz, taupe and gold veining"],["Splashback","Cream glazed mosaic, sandy grout"],["Walls","Lime white"],["Floor","Light warm limestone"],["Handles","Aged brass"],["Dining","Warm oak table and chairs, terracotta linen pads"],["Blinds","Warm linen"]],
+  layout:SAME_LAYOUT,layoutNone:true},
+ {id:"concept-c",L:"C",name:"White & charcoal",short:"Bright with crisp contrast",dir:"concept-C",tag:"Colour",
+  lede:"Crisp white cabinets with a honed charcoal worktop drawing a strong line round the room, picked up in matt black handles and tap.",
+  sw:[["Pure white","#F4F3EF"],["Charcoal quartz","#3A3B3D"],["Matt black","#1B1B1C"],["Grey grout","#8E8E8C"],["Pale oak","#D9C2A2"]],
+  spec:[["Cabinets","Pure white paint throughout"],["Worktops","Honed charcoal quartz, fine speckle"],["Splashback","White gloss mosaic, mid-grey grout"],["Walls","Clean white"],["Floor","Light warm-grey stone"],["Handles & tap","Matt black"],["Dining","Pale oak table, black-stained oak chairs, charcoal wool pads"],["Blinds","Crisp white"]],
+  layout:SAME_LAYOUT,layoutNone:true},
+ {id:"concept-d",L:"D",name:"Scandi oak",short:"Natural and textured",dir:"concept-D",tag:"Colour",
+  lede:"Chalky white cabinets warmed by pale oak worktops and a pale oak plank floor, with a handmade-look white tile behind.",
+  sw:[["Chalk white","#F2F0EA"],["Pale oak","#D9C4A6"],["Handmade tile","#F0ECE3"],["Tile grout","#D8D5CE"],["Grey linen","#C9C6BF"]],
+  spec:[["Cabinets","Chalky warm-white paint throughout"],["Worktops","Pale oak"],["Splashback","Handmade-look white tiles, 150 × 75 mm, brick bond, uneven glaze"],["Walls","Soft white"],["Floor","Pale oak planks, about 190 mm wide"],["Handles & tap","Brushed steel"],["Dining","Pale oak table and chairs, pale grey linen pads"],["Blinds","White linen"]],
+  layout:SAME_LAYOUT,layoutNone:true},
+ {id:"concept-e",L:"E",name:"Forest green tile",short:"White with a green accent",dir:"concept-E",tag:"Colour",
+  lede:"Soft white cabinets and white quartz, with colour contrast from a forest-green glazed tile behind the hob, sink and window recess.",
+  sw:[["Soft white","#F3F1EB"],["Forest green tile","#3A6754"],["White quartz","#F2F1EE"],["Brushed brass","#C9A86A"],["Green linen","#2F4A3C"]],
+  spec:[["Cabinets","Soft white paint throughout"],["Worktops","White quartz, fine grey veining"],["Splashback","Forest green glazed tiles, 65 × 200 mm, vertical stack, light grey grout"],["Walls","Soft white"],["Floor","Pale warm stone"],["Handles & tap","Brushed brass"],["Dining","Pale oak table and chairs, forest green linen pads"],["Blinds","White linen"]],
+  layout:SAME_LAYOUT,layoutNone:true},
+ {id:"concept-f",L:"F",name:"Navy tile",short:"White with a navy accent",dir:"concept-F",tag:"Colour",
+  lede:"Concept E with a deep navy tile instead of green, and brushed nickel handles to suit the cooler colour.",
+  sw:[["Soft white","#F3F1EB"],["Navy tile","#2B3F5E"],["White quartz","#F2F1EE"],["Brushed nickel","#C5C6CA"],["Navy linen","#2C3A54"]],
+  spec:[["Cabinets","Soft white paint throughout"],["Worktops","White quartz, fine grey veining"],["Splashback","Navy glazed tiles, 65 × 200 mm, vertical stack, light grey grout"],["Walls","Soft white"],["Floor","Pale warm stone"],["Handles & tap","Brushed nickel"],["Dining","Pale oak table and chairs, navy linen pads"],["Blinds","White linen"]],
+  layout:SAME_LAYOUT,layoutNone:true},
+ {id:"concept-g",L:"G",name:"White & charcoal, new layout",short:"Concept C with integrated fridge",dir:"concept-G",tag:"Layout",
+  lede:"Concept C's white and charcoal finishes, taken a step further: the peninsula becomes a tall integrated fridge-freezer and the dresser gets new wall units.",
+  sw:[["Pure white","#F4F3EF"],["Charcoal quartz","#3A3B3D"],["Matt black","#1B1B1C"],["Grey grout","#8E8E8C"],["Pale oak","#D9C2A2"]],
+  spec:[["Finishes","As Concept C"],["Cabinets","Pure white paint, including the new fridge housing and dresser wall units"],["Worktops","Honed charcoal quartz"],["Handles & tap","Matt black"],["Fridge","Integrated fridge-freezer, 650 wide × 600 deep"]],
+  layout:FRIDGE_LAYOUT,layoutNone:false},
+ {id:"concept-h",L:"H",name:"Scandi oak, new layout",short:"Concept D with integrated fridge",dir:"concept-H",tag:"Layout",
+  lede:"Concept D's chalk white and pale oak, with the same layout changes as G: integrated fridge-freezer in place of the peninsula and new wall units over the dresser.",
+  sw:[["Chalk white","#F2F0EA"],["Pale oak","#D9C4A6"],["Handmade tile","#F0ECE3"],["Tile grout","#D8D5CE"],["Grey linen","#C9C6BF"]],
+  spec:[["Finishes","As Concept D"],["Cabinets","Chalky warm-white paint, including the new fridge housing and dresser wall units"],["Worktops","Pale oak"],["Floor","Pale oak planks"],["Fridge","Integrated fridge-freezer, 650 wide × 600 deep"]],
+  layout:FRIDGE_LAYOUT,layoutNone:false}
+];
+/* Renders available now. Add a view number here when it finishes rendering. */
+const SHOTS={"concept-0-current-state":[1,2],"concept-A":[1,2],"concept-B":[1,2],"concept-C":[1,2],"concept-D":[1,2],"concept-E":[1,2],"concept-F":[1,2],"concept-G":[1,2,3,4,5,6],"concept-H":[1,5]};
+const PENDING={"concept-H":"Views 2, 3, 4 and 6 are still rendering."};
+const letterOf=d=>d==="concept-0-current-state"?"0":d.slice(-1);
+const src=(c,v,t)=>`img/${c.dir}/kitchen-00${v}-concept-${letterOf(c.dir)}${t?"_t":""}.jpg`;
+const byId=Object.fromEntries(C.map(c=>[c.id,c]));
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+const dots=c=>c.sw.slice(0,4).map(s=>`<span class="dot" style="background:${s[1]}"></span>`).join("");
+const TAGTXT={Layout:"Colour + layout",Colour:"Colour only",Baseline:"Existing room"};
+const tag=c=>`<span class="tag ${c.tag==="Layout"?"layout":""}">${TAGTXT[c.tag]}</span>`;
+const LAYOUT_CHIPS=["Peninsula removed","Integrated fridge-freezer","New dresser wall units","Freestanding fridge removed"];
+const GROUPS=[["Current kitchen","The room as it is today.",["current"]],
+ ["Colour studies","Same layout as today. Only colours, finishes and fittings change.",["concept-a","concept-b","concept-c","concept-d","concept-e","concept-f"]],
+ ["Colour + layout studies","New finishes plus layout changes: integrated fridge-freezer in place of the peninsula and new wall units over the dresser.",["concept-g","concept-h"]]];
+
+function buildNav(){
+  const groups=[["Start",["overview"]],["Current",["current"]],["Colour studies · layout unchanged",GROUPS[1][2]],["Colour + layout studies",GROUPS[2][2]]];
+  $("#railList").innerHTML=groups.map(([g,ids])=>`<li class="nav-group mono">${g}</li>`+ids.map(id=>{
+    if(id==="overview") return `<li><button class="nav-item" data-go="overview"><span class="letter">⌂</span><span><span class="nav-name">All concepts</span></span></button></li>`;
+    const c=byId[id];return `<li><button class="nav-item" data-go="${c.id}"><span class="letter">${c.L}</span><span><span class="nav-name">${esc(c.name)}</span><span class="dots">${dots(c)}</span></span></button></li>`}).join("")).join("");
+  const mc=c=>`<button class="m-card" data-go="${c.id}"><img src="${src(c,SHOTS[c.dir][0],true)}" alt=""><span><span class="mono">${c.L==="0"?"Baseline":"Concept "+c.L}</span><b>${esc(c.name)}</b><span class="dots">${dots(c)}</span></span></button>`;
+  $("#mGrid").innerHTML=`<button class="m-card" data-go="overview"><img src="${src(C[0],1,true)}" alt=""><span><span class="mono">Overview</span><b>All concepts</b></span></button>`+
+    GROUPS.map(([g,,ids])=>`<span class="m-group mono">${g}</span>`+ids.map(id=>mc(byId[id])).join("")).join("");
+}
+function overview(){
+  return `<section class="intro"><span class="mono">Gorse Lodge · Kitchen renovation</span><h1>Choose a concept to explore</h1>
+  <p>Concepts A to F are colour studies: the layout stays exactly as it is today. G and H are colour + layout studies that also move things around. Open any concept for its renders, palette and finishes.</p></section>
+  ${GROUPS.map(([g,d,ids])=>`<section class="sec"><div class="sec-head"><h2>${g}${g.startsWith("Colour +")?' <span class="tag layout">Layout changes</span>':g==="Colour studies"?' <span class="tag">Layout unchanged</span>':""}</h2><p>${d}</p></div>
+  <div class="cards">${ids.map(id=>{const c=byId[id];return `<button class="card ${c.tag==="Layout"?"layout":""}" data-go="${c.id}"><img loading="lazy" src="${src(c,SHOTS[c.dir][0],true)}" alt="${esc(c.name)} render">
+  <span class="body"><span class="row"><span class="mono">${c.L==="0"?"Baseline":"Concept "+c.L}</span>${tag(c)}</span>
+  <h3>${esc(c.name)}</h3><p>${esc(c.short)}</p><span class="dots">${dots(c)}</span></span></button>`}).join("")}</div></section>`).join("")}`;
+}
+function concept(c){
+  const i=C.indexOf(c),prev=C[i-1],next=C[i+1];
+  const shots=SHOTS[c.dir];
+  const chips=c.tag==="Layout"?LAYOUT_CHIPS.map(t=>`<span class="chip on">${t}</span>`).join(""):c.tag==="Colour"?`<span class="chip">Layout unchanged</span>`:"";
+  return `<section class="head"><div class="kicker"><span class="mono">${c.L==="0"?"Baseline":"Concept "+c.L}</span>${tag(c)}</div>
+   <h1>${esc(c.name)}</h1><p class="lede">${esc(c.lede)}</p>${chips?`<div class="chips">${chips}</div>`:""}
+   <div class="swatches">${c.sw.map(s=>`<span class="sw"><i style="background:${s[1]}"></i><b>${esc(s[0])}</b><span>${s[1]}</span></span>`).join("")}</div></section>
+  <section class="gallery">${shots.map((v,k)=>`<figure style="margin:0"><button class="shot" data-open="${k}"><img loading="lazy" src="${src(c,v,true)}" alt="${esc(c.name)}, ${VIEWS[v]}">
+   <figcaption><em>View ${v}</em>${VIEWS[v]}</figcaption></button></figure>`).join("")}${PENDING[c.dir]?`<div class="pending">${esc(PENDING[c.dir])}<br>They'll appear here when they're ready.</div>`:""}</section>
+  <section class="details">
+   <div class="panel"><h2>Colours & finishes</h2><dl class="spec">${c.spec.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl></div>
+   <div class="panel"><h2>${c.L==="0"?"Layout today":"Layout vs current kitchen"}</h2><ul class="changes ${c.layoutNone?"none":""}">${c.layout.map(t=>`<li>${esc(t)}</li>`).join("")}</ul></div>
+  </section>
+  <nav class="pager">${prev?`<button data-go="${prev.id}"><span class="mono">Previous</span><b>${prev.L==="0"?"":prev.L+" · "}${esc(prev.name)}</b></button>`:`<button data-go="overview"><span class="mono">Back to</span><b>All concepts</b></button>`}
+   ${next?`<button data-go="${next.id}"><span class="mono">Next</span><b>${next.L} · ${esc(next.name)}</b></button>`:`<button data-go="overview"><span class="mono">Back to</span><b>All concepts</b></button>`}</nav>`;
+}
+let current=null;
+function route(){
+  const id=(location.hash||"").slice(1);
+  current=byId[id]||null;
+  $("#view").innerHTML=current?concept(current):overview();
+  document.querySelectorAll("[data-go]").forEach(b=>{const on=(b.dataset.go===(current?current.id:"overview"));if(b.closest(".rail,.menu"))b.setAttribute("aria-current",on?"page":"false")});
+  $("#menuBtnCur").textContent=current?(current.L==="0"?"Today":current.L):"All";
+  document.title=current?`${current.name} · Gorse Lodge Kitchen`:"Gorse Lodge Kitchen";
+  window.scrollTo({top:0});
+}
+document.addEventListener("click",e=>{
+  const g=e.target.closest("[data-go]");
+  if(g){const id=g.dataset.go;closeMenu();if(id==="overview"){if(location.hash){location.hash="";}route();}else if(location.hash!=="#"+id){location.hash=id;}else route();return}
+  const o=e.target.closest("[data-open]");if(o&&current)openLb(+o.dataset.open);
+});
+window.addEventListener("hashchange",route);
+
+/* menus */
+const menu=$("#menu"),scrim=$("#scrim");
+function setMenu(open){menu.classList.toggle("open",open);scrim.classList.toggle("open",open);
+  ["#burger","#menuBtn"].forEach(s=>$(s).setAttribute("aria-expanded",open));
+  if(open){const f=menu.querySelector('[aria-current="page"]')||menu.querySelector("button.m-card");f&&f.focus({preventScroll:true})}}
+const closeMenu=()=>setMenu(false);
+$("#burger").onclick=()=>setMenu(!menu.classList.contains("open"));
+$("#menuBtn").onclick=()=>setMenu(!menu.classList.contains("open"));
+$("#menuClose").onclick=closeMenu;scrim.onclick=closeMenu;
+window.addEventListener("resize",()=>{if(innerWidth>=1100)closeMenu()});
+
+/* lightbox */
+const lb=$("#lb"),img=$("#lbImg");let idx=0,compare=false,lastFocus=null;
+function lbRender(){
+  const c=current,shots=SHOTS[c.dir],v=shots[idx];
+  const base=byId.current,hasBase=SHOTS[base.dir].includes(v)&&c!==base;
+  if(!hasBase)compare=false;
+  const show=compare?base:c;
+  img.src=src(show,v,false);img.alt=`${show.name}, ${VIEWS[v]}`;
+  $("#lbTitle").textContent=show.L==="0"?"Current kitchen":`${c.L} · ${c.name}`;
+  $("#lbSub").textContent=`View ${v} · ${VIEWS[v]}`;
+  $("#lbCount").textContent=`${idx+1} / ${shots.length}`;
+  const many=shots.length>1;["#lbPrev","#lbNext","#lbPrev2","#lbNext2"].forEach(s=>$(s).disabled=!many);
+  const cb=$("#lbCompare");cb.hidden=!hasBase;cb.setAttribute("aria-pressed",compare);cb.textContent=compare?`Back to concept ${c.L}`:"Compare with current kitchen";
+}
+function openLb(k){idx=k;compare=false;lastFocus=document.activeElement;lb.hidden=false;document.body.style.overflow="hidden";lbRender();$("#lbClose").focus()}
+function closeLb(){lb.hidden=true;document.body.style.overflow="";img.removeAttribute("src");lastFocus&&lastFocus.focus&&lastFocus.focus()}
+function step(d){const n=SHOTS[current.dir].length;idx=(idx+d+n)%n;lbRender()}
+$("#lbClose").onclick=closeLb;$("#lbPrev").onclick=$("#lbPrev2").onclick=()=>step(-1);$("#lbNext").onclick=$("#lbNext2").onclick=()=>step(1);
+$("#lbCompare").onclick=()=>{compare=!compare;lbRender()};
+$("#lbStage").addEventListener("click",e=>{if(e.target.id==="lbStage")closeLb()});
+document.addEventListener("keydown",e=>{
+  if(!lb.hidden){if(e.key==="Escape")closeLb();else if(e.key==="ArrowLeft")step(-1);else if(e.key==="ArrowRight")step(1);else if(e.key.toLowerCase()==="c"&&!$("#lbCompare").hidden){compare=!compare;lbRender()}return}
+  if(e.key==="Escape")closeMenu();
+});
+let tx=null;
+$("#lbStage").addEventListener("touchstart",e=>{tx=e.touches[0].clientX},{passive:true});
+$("#lbStage").addEventListener("touchend",e=>{if(tx===null)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>45)step(dx<0?1:-1);tx=null});
+
+buildNav();route();
+</script>
+
+</body>
+</html>
